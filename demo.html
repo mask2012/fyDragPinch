@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+	<title>drag and pinch</title>
+	
+	<link rel="stylesheet" media="all" href="css/style.css">
+
+</head>
+<body id="body">
+	
+
+
+	<div id="wrapper">
+
+		<div class="hudong_area">
+			<div class="upload_title">上传照片<br>测测自己卧底潜质</div>
+			<div class="upload_area" id="upload-area">
+				<div class="upload_btn" id="upload-btn"></div>
+				<div id="upload-img" class="upload_img">
+					<img src="images/black.gif" height="20" width="20" alt="" >
+				</div>
+			</div>
+			<div id="hint-drag" class="hint_drag"></div>
+			<a href="#" class="btn_basic btn_start_test" id="btn-start-test">停止缩放</a>
+			<a href="#" class="btn_basic btn_start_test " id="btn-start-test2">重新开始缩放</a>
+		</div>
+
+	</div>
+
+
+
+
+	<script src="http://1251097942.cdn.myqcloud.com/1251097942/public/jquery-2.1.1.min.js"></script>
+
+	<script src="js/util.js"></script>
+	<script src="js/Event.min.js"></script>
+	<script src="js/Event.drag-pinch-1.0.js"></script>
+	<script>
+
+		$('#upload-btn')[0].addEventListener('click', function(){
+			$('#upload-area').addClass('upload_area_active')
+			$('#btn-start-test').removeClass('btn_disabled');
+			$('#hint-drag').fadeIn(200);
+
+			$('#upload-img img').attr({
+				src: 'images/btn_duihuan.png'
+			});
+
+			var dragPinchHandle=$('#upload-img').dragPinch();
+
+			$('#btn-start-test')[0].addEventListener('click', function(){
+				dragPinchHandle.stop();
+				$.util.alert('拖拽缩放停止')
+			});
+
+			$('#btn-start-test2')[0].addEventListener('click', function(){
+				dragPinchHandle.restart();
+				$.util.alert('拖拽缩放开始')
+			});
+
+
+		});
+
+
+		
+	</script>
+
+	
+</body>
+</html>
