@@ -26,6 +26,7 @@
 			<div id="hint-drag" class="hint_drag"></div>
 			<a href="#" class="btn_basic btn_start_test" id="btn-start-test">停止缩放</a>
 			<a href="#" class="btn_basic btn_start_test " id="btn-start-test2">重新开始缩放</a>
+			<a href="#" class="btn_basic btn_start_test " id="btn-start-test3">重置</a>
 		</div>
 
 	</div>
@@ -39,7 +40,6 @@
 	<script src="js/Event.min.js"></script>
 	<script src="js/Event.drag-pinch-1.0.js"></script>
 	<script>
-
 		$('#upload-btn')[0].addEventListener('click', function(){
 			$('#upload-area').addClass('upload_area_active')
 			$('#btn-start-test').removeClass('btn_disabled');
@@ -49,7 +49,12 @@
 				src: 'images/btn_duihuan.png'
 			});
 
-			var dragPinchHandle=$('#upload-img').dragPinch();
+			var dragPinchHandle=$('#upload-img').dragPinch({
+				restrict:[100,100],
+				onFinish:function(endParas){
+					console.log(endParas);
+				}
+			});
 
 			$('#btn-start-test')[0].addEventListener('click', function(){
 				dragPinchHandle.stop();
@@ -59,6 +64,11 @@
 			$('#btn-start-test2')[0].addEventListener('click', function(){
 				dragPinchHandle.restart();
 				$.util.alert('拖拽缩放开始')
+			});
+
+			$('#btn-start-test3')[0].addEventListener('click', function(){
+				dragPinchHandle.reset();
+				$.util.alert('重置')
 			});
 
 

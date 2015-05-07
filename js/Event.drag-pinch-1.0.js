@@ -1,13 +1,16 @@
 ;(function($){
 		$.fn.dragPinch=function(options){
-			var opts=$.extend({   //整合默认参数和自定义参数
-				onFinish: function(){}
-			},options);
+			
 
 			var divCont=this;  //jquery插件的对象
 			var endParas={Rotate:0,Scale:1,X:0,Y:0},
 				startParas={X:0,Y:0},
 				canDrag=true;
+
+			var opts=$.extend({   //整合默认参数和自定义参数
+				restrict:[30,30],
+				onFinish: function(endParas){}
+			},options);
 		    
 		    var gestures = { // listeners for various event types.
 				gesture: function (event) { // fingers, minFingers, maxFingers
@@ -18,9 +21,10 @@
 					}else if(event.state=='end'){
 						endParas.Scale=endParas.Scale*event.scale;
 						endParas.Rotate=endParas.Rotate+event.rotation;
+						opts.onFinish(endParas);
 						setTimeout(function(){
 							canDrag=true;
-						}, 100)
+						}, 100);
 					}else if(event.fingers==2&&event.state=='change'){
 						var a=endParas.Scale*event.scale;
 						var b=endParas.Rotate+event.rotation;
@@ -43,7 +47,9 @@
 						}else if(event.fingers==1&&event.state=='up'){
 								endParas.X+=event.x-startParas.X;
 								endParas.Y+=event.y-startParas.Y;
+								opts.onFinish(endParas);
 						}else if(event.fingers==1&&event.state=='move'){
+							if(opts.restrict[0])
 							divCont.css({
 								'-webkit-transform': 'scale('+endParas.Scale+') rotate('+endParas.Rotate+'deg)',
 								'left': (endParas.X+event.x-startParas.X)+'px',
@@ -71,6 +77,21 @@
 		    	var body = $('#body')[0];
 				body.addEventListener('gesture', gestures['gesture']);
 				body.addEventListener('drag', gestures['drag']);
+		    }
+
+		    divCont.reset=function(){1
+		    	document.removeEventListener("touchstart", eventjs.prevent);
+		    	var body = $('#body')[0];
+				body.removeEventListener('gesture', gestures['gesture']);
+				body.removeEventListener('drag', gestures['drag']);
+				endParas={Rotate:0,Scale:1,X:0,Y:0},
+				startParas={X:0,Y:0},
+				divCont.css({
+					'-webkit-transform': 'scale(1) rotate(0deg)',
+					'left': '0px',
+					'top': '0px'
+				});
+				opts.onFinish(endParas);
 		    }
 
 			var init = function() {
