@@ -40,7 +40,10 @@
 	<script src="js/Event.min.js"></script>
 	<script src="js/Event.drag-pinch-1.0.js"></script>
 	<script>
-		$('#upload-btn')[0].addEventListener('click', function(){
+		// $('#upload-btn')[0].addEventListener('click', function(){
+		$('#upload-btn').click(function() {
+			  
+		
 			$('#upload-area').addClass('upload_area_active')
 			$('#btn-start-test').removeClass('btn_disabled');
 			$('#hint-drag').fadeIn(200);
@@ -50,23 +53,26 @@
 			});
 
 			var dragPinchHandle=$('#upload-img').dragPinch({
-				restrict:[100,100],
+				// restrict:[100,100],
+				// dragArea:$("body"),
 				onFinish:function(endParas){
 					console.log(endParas);
 				}
 			});
 
-			$('#btn-start-test')[0].addEventListener('click', function(){
+
+			$('#btn-start-test').click(function() {
 				dragPinchHandle.stop();
 				$.util.alert('拖拽缩放停止')
 			});
 
-			$('#btn-start-test2')[0].addEventListener('click', function(){
+			// $('#btn-start-test2')[0].addEventListener('click', function(){
+			$('#btn-start-test2').click(function() {
 				dragPinchHandle.restart();
 				$.util.alert('拖拽缩放开始')
 			});
 
-			$('#btn-start-test3')[0].addEventListener('click', function(){
+			$('#btn-start-test3').click(function() {
 				dragPinchHandle.reset();
 				$.util.alert('重置')
 			});
