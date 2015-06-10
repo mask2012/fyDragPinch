@@ -2,7 +2,6 @@
 (function($) {
 	$.fn.dragPinch = function(options) {
 
-
 		var divCont = this; //jquery插件的对象
 		var endParas = {
 				Rotate: 0,
@@ -20,7 +19,10 @@
 
 
 		var opts = $.extend({ //整合默认参数和自定义参数
-			restrict: [30, 30],
+			// restrict: [30, 30],
+			allowDrag:true,
+			allowScale:true,
+			allowRotate:true,
 			onFinish: function(endParas) {}
 		}, options);
 
@@ -36,22 +38,68 @@
 				if (event.state == 'start') {
 					canDrag = false;
 				} else if (event.state == 'end') {
-					endParas.Scale = endParas.Scale * event.scale;
-					endParas.Rotate = endParas.Rotate + event.rotation;
+					if(opts.allowScale){
+						endParas.Scale = endParas.Scale * event.scale;
+					}
+					if(opts.allowRotate){
+						endParas.Rotate = endParas.Rotate + event.rotation;
+					}
 					opts.onFinish(endParas);
 					setTimeout(function() {
 						canDrag = true;
 					}, 100);
 				} else if (event.fingers == 2 && event.state == 'change') {
-					var a = endParas.Scale * event.scale;
-					var b = endParas.Rotate + event.rotation;
-					// write( endParas.X );
-					divCont.css({
-						'position':'relative',
-						'-webkit-transform': 'scale(' + a + ') rotate(' + b + 'deg)',
-						'left': (endParas.X) + 'px',
-						'top': (endParas.Y) + 'px'
-					});
+					if(opts.allowDrag){
+						if(opts.allowScale && opts.allowRotate){
+							var a = endParas.Scale * event.scale;
+							var b = endParas.Rotate + event.rotation;
+							// write( endParas.X );
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'scale(' + a + ') rotate(' + b + 'deg)',
+								'left': (endParas.X) + 'px',
+								'top': (endParas.Y) + 'px'
+							});
+						}else if(opts.allowScale){
+							var a = endParas.Scale * event.scale;
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'scale(' + a + ')',
+								'left': (endParas.X) + 'px',
+								'top': (endParas.Y) + 'px'
+							});
+						}else if(opts.allowRotate){
+							var b = endParas.Rotate + event.rotation;
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'rotate(' + b + 'deg)',
+								'left': (endParas.X) + 'px',
+								'top': (endParas.Y) + 'px'
+							});
+						}
+					}else{
+						if(opts.allowScale && opts.allowRotate){
+							var a = endParas.Scale * event.scale;
+							var b = endParas.Rotate + event.rotation;
+							// write( endParas.X );
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'scale(' + a + ') rotate(' + b + 'deg)'
+							});
+						}else if(opts.allowScale){
+							var a = endParas.Scale * event.scale;
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'scale(' + a + ')'
+							});
+						}else if(opts.allowRotate){
+							var b = endParas.Rotate + event.rotation;
+							divCont.css({
+								'position':'relative',
+								'-webkit-transform': 'rotate(' + b + 'deg)'
+							});
+						}
+					}
 				}
 			},
 			drag: function(event) { // fingers, maxFingers, position
@@ -67,13 +115,12 @@
 						endParas.Y += event.y - startParas.Y;
 						opts.onFinish(endParas);
 					} else if (event.fingers == 1 && event.state == 'move') {
-						if (opts.restrict[0])
-							divCont.css({
-								'position':'relative',
-								'-webkit-transform': 'scale(' + endParas.Scale + ') rotate(' + endParas.Rotate + 'deg)',
-								'left': (endParas.X + event.x - startParas.X) + 'px',
-								'top': (endParas.Y + event.y - startParas.Y) + 'px'
-							});
+						divCont.css({
+							'position':'relative',
+							'-webkit-transform': 'scale(' + endParas.Scale + ') rotate(' + endParas.Rotate + 'deg)',
+							'left': (endParas.X + event.x - startParas.X) + 'px',
+							'top': (endParas.Y + event.y - startParas.Y) + 'px'
+						});
 					}
 				}
 			}
@@ -83,7 +130,9 @@
 		divCont.stop = function() {
 			document.removeEventListener("touchmove", eventjs.prevent);
 			body.removeEventListener('gesture', gestures['gesture']);
-			body.removeEventListener('drag', gestures['drag']);
+			if(opts.allowDrag){
+				body.removeEventListener('drag', gestures['drag']);
+			}
 		}
 
 		divCont.restart = function() {
@@ -93,13 +142,17 @@
 			});
 			document.addEventListener("touchmove", eventjs.prevent);
 			body.addEventListener('gesture', gestures['gesture']);
-			body.addEventListener('drag', gestures['drag']);
+			if(opts.allowDrag){
+				body.addEventListener('drag', gestures['drag']);
+			}
 		}
 
 		divCont.reset = function() {
 			document.removeEventListener("touchmove", eventjs.prevent);
 			body.removeEventListener('gesture', gestures['gesture']);
-			body.removeEventListener('drag', gestures['drag']);
+			if(opts.allowDrag){
+				body.removeEventListener('drag', gestures['drag']);
+			}
 			endParas = {
 					Rotate: 0,
 					Scale: 1,
@@ -116,6 +169,7 @@
 					'top': '0px'
 				});
 			opts.onFinish(endParas);
+			divCont.restart();
 		}
 
 		var init = function() {
@@ -126,10 +180,14 @@
 
 			document.addEventListener("touchmove", eventjs.prevent);
 			body.addEventListener('gesture', gestures['gesture']);
-			body.addEventListener('drag', gestures['drag']);
+			if(opts.allowDrag){
+				console.log(opts.allowDrag)
+				body.addEventListener('drag', gestures['drag']);
+			}
 		};
 
 		init();
+
 
 		return this;
 	}

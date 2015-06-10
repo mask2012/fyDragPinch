@@ -24,8 +24,8 @@
 				</div>
 			</div>
 			<div id="hint-drag" class="hint_drag"></div>
-			<a href="#" class="btn_basic btn_start_test" id="btn-start-test">停止缩放</a>
-			<a href="#" class="btn_basic btn_start_test " id="btn-start-test2">重新开始缩放</a>
+			<a href="#" class="btn_basic btn_start_test" id="btn-start-test">停止</a>
+			<a href="#" class="btn_basic btn_start_test " id="btn-start-test2">恢复</a>
 			<a href="#" class="btn_basic btn_start_test " id="btn-start-test3">重置</a>
 		</div>
 
@@ -49,12 +49,13 @@
 			$('#hint-drag').fadeIn(200);
 
 			$('#upload-img img').attr({
-				src: 'images/btn_duihuan.png'
+				src: 'http://1251097942.cdn.myqcloud.com/1251097942/demos/photo/photo1.jpg'
 			});
 
 			var dragPinchHandle=$('#upload-img').dragPinch({
-				// restrict:[100,100],
-				// dragArea:$("body"),
+				allowDrag:true,
+				allowScale:false,
+				allowRotate:true,
 				onFinish:function(endParas){
 					console.log(endParas);
 				}
