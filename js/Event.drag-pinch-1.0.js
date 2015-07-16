@@ -6,12 +6,12 @@
 		var endParas = {
 				Rotate: 0,
 				Scale: 1,
-				X: 0,
-				Y: 0
+				x: 0,
+				y: 0
 			},
 			startParas = {
-				X: 0,
-				Y: 0
+				x: 0,
+				y: 0
 			},
 			canDrag = true;
 
@@ -53,35 +53,35 @@
 						if(opts.allowScale && opts.allowRotate){
 							var a = endParas.Scale * event.scale;
 							var b = endParas.Rotate + event.rotation;
-							// write( endParas.X );
+							// write( endParas.x );
 							divCont.css({
 								'position':'relative',
 								'-webkit-transform': 'scale(' + a + ') rotate(' + b + 'deg)',
-								'left': (endParas.X) + 'px',
-								'top': (endParas.Y) + 'px'
+								'left': (endParas.x) + 'px',
+								'top': (endParas.y) + 'px'
 							});
 						}else if(opts.allowScale){
 							var a = endParas.Scale * event.scale;
 							divCont.css({
 								'position':'relative',
 								'-webkit-transform': 'scale(' + a + ')',
-								'left': (endParas.X) + 'px',
-								'top': (endParas.Y) + 'px'
+								'left': (endParas.x) + 'px',
+								'top': (endParas.y) + 'px'
 							});
 						}else if(opts.allowRotate){
 							var b = endParas.Rotate + event.rotation;
 							divCont.css({
 								'position':'relative',
 								'-webkit-transform': 'rotate(' + b + 'deg)',
-								'left': (endParas.X) + 'px',
-								'top': (endParas.Y) + 'px'
+								'left': (endParas.x) + 'px',
+								'top': (endParas.y) + 'px'
 							});
 						}
 					}else{
 						if(opts.allowScale && opts.allowRotate){
 							var a = endParas.Scale * event.scale;
 							var b = endParas.Rotate + event.rotation;
-							// write( endParas.X );
+							// write( endParas.x );
 							divCont.css({
 								'position':'relative',
 								'-webkit-transform': 'scale(' + a + ') rotate(' + b + 'deg)'
@@ -108,18 +108,18 @@
 				// write( event.x );
 				if (canDrag) {
 					if (event.fingers == 1 && event.state == 'down') {
-						startParas.X = event.x;
-						startParas.Y = event.y;
+						startParas.x = event.x;
+						startParas.y = event.y;
 					} else if (event.fingers == 1 && event.state == 'up') {
-						endParas.X += event.x - startParas.X;
-						endParas.Y += event.y - startParas.Y;
+						endParas.x += event.x - startParas.x;
+						endParas.y += event.y - startParas.y;
 						opts.onFinish(endParas);
 					} else if (event.fingers == 1 && event.state == 'move') {
 						divCont.css({
 							'position':'relative',
 							'-webkit-transform': 'scale(' + endParas.Scale + ') rotate(' + endParas.Rotate + 'deg)',
-							'left': (endParas.X + event.x - startParas.X) + 'px',
-							'top': (endParas.Y + event.y - startParas.Y) + 'px'
+							'left': (endParas.x + event.x - startParas.x) + 'px',
+							'top': (endParas.y + event.y - startParas.y) + 'px'
 						});
 					}
 				}
@@ -156,12 +156,12 @@
 			endParas = {
 					Rotate: 0,
 					Scale: 1,
-					X: 0,
-					Y: 0
+					x: 0,
+					y: 0
 				},
 				startParas = {
-					X: 0,
-					Y: 0
+					x: 0,
+					y: 0
 				},
 				divCont.css({
 					'-webkit-transform': 'scale(1) rotate(0deg)',
